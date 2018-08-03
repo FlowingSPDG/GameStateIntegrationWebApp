@@ -166,10 +166,32 @@ function addPlayerInfo(player){
 	if(player.state.defusekit)
 		defuser = '/public/csgo_icons/item_defuser.svg';
 	
-	if(player.state.round_kills > 0 && player.team == 'T')
-		killcount = '<span class="killcount_t">x' + player.state.round_kills + '</span><img class="killimage_t" src="/public/csgo_icons/skull.png">';
-	else if(player.state.round_kills > 0)
-		killcount = '<span class="killcount_ct">' + player.state.round_kills + 'x</span><img class="killimage_ct" src="/public/csgo_icons/skull.png">';
+//	if(player.state.round_kills > 0 && player.team == 'T')
+//		killcount = '<span class="killcount_t">x' + player.state.round_kills + '</span><img class="killimage_t" src="/public/csgo_icons/skull.png">';
+//	else if(player.state.round_kills > 0)
+//		killcount = '<span class="killcount_ct">' + player.state.round_kills + 'x</span><img class="killimage_ct" src="/public/csgo_icons/skull.png">';
+// THIS IS THE COMMENTS
+// view player.match_stats.kills insted of player.state.round_kills
+	if(player.match_stats.kills > 0 && player.team == 'T')
+		killcount = '<span class="killcount_t">' + 'K : ' + player.match_stats.kills + ' // ' + 'D : ' + player.match_stats.deaths + ' // ' + 'A : ' + player.match_stats.assists + '</span>';
+	else if(player.match_stats.kills > 0)
+		killcount = '<span class="killcount_ct">' + 'K : ' + player.match_stats.kills + ' // ' + 'D : ' + player.match_stats.deaths + ' // ' + 'A : ' + player.match_stats.assists + '</span>';
+/*
+	//THIS IS DEATH COUNTS
+	if(player.match_stats.deaths > 0 && player.team == 'T')
+		deathcount = '<span class="deathcount_t">' + 'D : ' + player.match_stats.deaths + '</span>';
+	else if(player.match_stats.deaths > 0)
+		deathcount = '<span class="deathcount_ct">' + 'D : ' + player.match_stats.deaths + '</span>';
+	
+//THIS IS ASSISTS COUNTS
+
+	if(player.match_stats.assists > 0 && player.team == 'T')
+		assistcount = '<span class="assistcount_t">' + 'A : ' + player.match_stats.assists + '</span>';
+	else if(player.match_stats.assists > 0)
+		assistcount = '<span class="a_ct">' + 'A : ' + player.match_stats.assists + '</span>';
+//
+//	
+*/
 	
 	if(!rifle){
 		rifle = pistol;

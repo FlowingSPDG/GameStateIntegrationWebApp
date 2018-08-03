@@ -124,6 +124,22 @@ body{
 	font-weight: 700;
 }
 
+.KDA_T{
+	position: absolute;
+	top: 75%;
+	transform: translate(0,-50%);
+	margin-right: 38px;
+	font-weight: 700;
+}
+
+.KDA_CT{
+	position: absolute;
+	top: 75%;
+	transform: translate(0,-50%);
+	margin-left: 40px;
+	font-weight: 700;
+}
+
 .healthtxt_t{
 	position: absolute;
 	text-align: center;
@@ -145,11 +161,12 @@ body{
 
 .killcount_ct{
 	position: absolute;
-	right: 20px;
+	left: 50%;
 	top: 50%;
 	transform: translate(0,-50%);
 	font-size: 11px;
 	margin-top: 1px;
+	text-align: center;
 }
 
 .killimage_ct{
@@ -164,11 +181,12 @@ body{
 
 .killcount_t{
 	position: absolute;
-	left: 20px;
+	right: 50%;
 	top: 50%;
 	transform: translate(0,-50%);
 	font-size: 11px;
 	margin-top: 1px;
+	text-align: center;
 }
 
 .killimage_t{
