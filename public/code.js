@@ -26,18 +26,24 @@ $( document ).ready(function() {
 	
 	var socket = io();
 	socket.on('update', function(data){
+		//console.log(data);
 		var updateoffset = performance.now() - lastupdate;
 		lastupdate = performance.now();
 		var p1 = performance.now();
+		var maparray = data.map.name.split("/");
+		var map = maparray.slice(-1)[0];
+		
 		// Return if no player data is send
+		/*
 		if(data.allplayers == null)
 			return;
+		*/
 		
 		// Clear map
 		$('#map').empty();
 		
 		//Add map image
-		$('#map').append('<img class="img-responsive" src="/public/maps/' + data.map.name + '.jpg">')
+		$('#map').append('<img class="img-responsive" src="/public/maps/' + map + '.jpg">')
 		
 		// Clear player stats
 		$('#players_ct').empty();
@@ -46,7 +52,7 @@ $( document ).ready(function() {
 		// Clear game info
 		$('#gameinfo').empty();
 		
-		$('#gameinfo').append('<span class="info">' + data.map.name + ' - ' + data.map.mode + '</span><br><span class="info">Round ' + (data.map.round + 1) + '/30</span><br><span id="score">' + data.map.team_ct.score + ' : ' + data.map.team_t.score + '</span><br><span id="time">' + data.phase_countdowns.phase_ends_in + '</span><br><span class="info">' + data.phase_countdowns.phase + '</span><br>');
+		$('#gameinfo').append('<span class="info">' + map + ' - ' + data.map.mode + '</span><br><span class="info">Round ' + (data.map.round + 1) + '/30</span><br><span id="score">' + data.map.team_ct.score + ' : ' + data.map.team_t.score + '</span><br><span id="time">' + data.phase_countdowns.phase_ends_in + '</span><br><span class="info">' + data.phase_countdowns.phase + '</span><br>');
 		
 		
 		// Iterate through each player
@@ -56,8 +62,15 @@ $( document ).ready(function() {
 			addPlayerInfo(player);
 			
 			// Add player to map
-			addPlayerPosition(player, data.map.name);
+			addPlayerPosition(player, map);
 			
+		});
+		
+		jQuery.each(data.grenades, function(key, grenade){
+			// Add grenades to map(WIP)
+			console.log("AddGrenadePosition triggered");
+			console.log(grenade);
+			addGrenadePosition(grenade, map);
 		});
 		var p2 = performance.now();
 		console.log('Time since last update: ' + updateoffset + ' ms.');
@@ -66,6 +79,80 @@ $( document ).ready(function() {
 });
 
 var lastupdate = 0;
+
+function addGrenadePosition(grenade, mapname){
+	// Add new position and name to map if alive
+	//if(player.state.health > 0){
+		// Get correct offsets
+		console.log(grenade);
+		var offset;
+		var size;
+		switch(mapname){
+			case "de_mirage":
+				offset = mirageoffset;
+				size = miragesize;
+				break;
+			case "de_cache":
+				offset = cacheoffset;
+				size = cachesize;
+				break;
+			case "de_inferno":
+				offset = infernooffset;
+				size = infernosize;
+				break;
+			case "de_overpass":
+				offset = overpassoffset;
+				size = overpasssize;
+				break;
+			case "de_cbble":
+				offset = cbbleoffset;
+				size = cbblesize;
+				break;
+			case "de_train":
+				offset = trainoffset;
+				size = trainsize;
+				break;
+			case "de_nuke":
+				offset = nukeoffset;
+				size = nukesize;
+				break;
+			default:
+				offset = dust2offset;
+				size = dust2size;
+					  }
+		
+		// Get position and calculate percentage
+		var positions = grenade.position.split(',');
+		var x = parseFloat(positions[0]);
+		var y = parseFloat(positions[1]);
+		var z = parseFloat(positions[2]);
+		x = x + offset[0];
+		y = y + offset[1];
+		var xp = (x/size[0])*100;
+		var yp = (1 - (y/size[1]))*100;
+		switch(grenade.type){
+			default:
+				console.log("Unknown grenade data");
+				var grenade_img = "";
+				var grenade_type = "";
+				break;
+			
+			case "smoke":
+				//console.log("SMOKE");
+				var grenade_img = "weapon_smokegrenade.svg";
+				var grenade_type = "smoke";
+				break;
+			case "flashbang":
+				//console.log("FB");
+				var grenade_img = "weapon_flashbang.svg";
+				var grenade_type = "flash";
+				break;
+		}
+
+		$('#map').append('<img class="grenadepos" style="left:' + xp + '%;top:' + yp + '%" src="/public/csgo_icons/' + grenade_img + '">');
+		//$('#map').append('<span class="grenadeposname" style="left:' + xp + '%;top:calc(' + yp + '% + 15px)">' + grenade_type + '</span>');
+	//}
+}
 
 function addPlayerPosition(player, mapname){
 	// Add new position and name to map if alive
@@ -111,6 +198,7 @@ function addPlayerPosition(player, mapname){
 		var positions = player.position.split(',');
 		var x = parseFloat(positions[0]);
 		var y = parseFloat(positions[1]);
+		var z = parseFloat(positions[2]); // WIP for de_nuke layerd radar
 		x = x + offset[0];
 		y = y + offset[1];
 		var xp = (x/size[0])*100;

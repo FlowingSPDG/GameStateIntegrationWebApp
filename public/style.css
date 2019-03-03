@@ -246,6 +246,12 @@ body{
 	-webkit-transform: translate(-50%, -50%);
 }
 
+.grenadepos{
+	position: absolute;
+	transform: translate(-50%, -50%);
+	-webkit-transform: translate(-50%, -50%);
+}
+
 .playerposname{
 	position: absolute;
 	transform: translate(-50%, -50%);
