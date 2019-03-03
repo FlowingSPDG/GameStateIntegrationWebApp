@@ -17,7 +17,7 @@ app.post('/data', function(req, res){
 		res.sendStatus(200);
 		io.emit('update', req.body);
 		console.log('Sent update request to clients.......');
-		//console.log(req.body);
+		console.log(req.body);
 		//console.log(req.body.grenades);
 		//console.log(req.body.grenades["158"]); // what's the key??
 		//console.log('%j', req.body);

@@ -51,8 +51,25 @@ $( document ).ready(function() {
 		
 		// Clear game info
 		$('#gameinfo').empty();
-		
-		$('#gameinfo').append('<span class="info">' + map + ' - ' + data.map.mode + '</span><br><span class="info">Round ' + (data.map.round + 1) + '/30</span><br><span id="score">' + data.map.team_ct.score + ' : ' + data.map.team_t.score + '</span><br><span id="time">' + data.phase_countdowns.phase_ends_in + '</span><br><span class="info">' + data.phase_countdowns.phase + '</span><br>');
+		var phase_min = Math.floor(data.phase_countdowns.phase_ends_in / 60 )
+		var phase_sec = get_phase_sec(data.phase_countdowns.phase_ends_in);
+		function get_phase_sec(sec){
+			switch(true)
+			{
+				default:
+					return sec;
+					break;
+				case sec >= 120:
+					return parseInt(sec - 120);
+					break;
+				case sec >= 60:
+					return parseInt(sec - 60);
+					break;
+			}
+		}
+			
+			
+		$('#gameinfo').append('<span class="info">' + map + ' - ' + data.map.mode + '</span><br><span class="info">Round ' + (data.map.round + 1) + '/30</span><br><span id="score">' + data.map.team_ct.score + ' : ' + data.map.team_t.score + '</span><br><span id="time">' + phase_min + " : " + phase_sec + '</span><br><span class="info">' + data.phase_countdowns.phase + '</span><br>');
 		
 		
 		// Iterate through each player
@@ -72,6 +89,8 @@ $( document ).ready(function() {
 			console.log(grenade);
 			addGrenadePosition(grenade, map);
 		});
+		
+		//addBombPosition(data.bomb, data.mapname);
 		var p2 = performance.now();
 		console.log('Time since last update: ' + updateoffset + ' ms.');
 		console.log('Update took: ' + (p2 - p1) + ' ms.');
@@ -79,6 +98,62 @@ $( document ).ready(function() {
 });
 
 var lastupdate = 0;
+
+function addBombPosition(bomb, mapname){
+	// Add new position and name to map if alive
+	//if(player.state.health > 0){
+		// Get correct offsets
+		console.log(bomb);
+		var offset;
+		var size;
+		switch(mapname){
+			case "de_mirage":
+				offset = mirageoffset;
+				size = miragesize;
+				break;
+			case "de_cache":
+				offset = cacheoffset;
+				size = cachesize;
+				break;
+			case "de_inferno":
+				offset = infernooffset;
+				size = infernosize;
+				break;
+			case "de_overpass":
+				offset = overpassoffset;
+				size = overpasssize;
+				break;
+			case "de_cbble":
+				offset = cbbleoffset;
+				size = cbblesize;
+				break;
+			case "de_train":
+				offset = trainoffset;
+				size = trainsize;
+				break;
+			case "de_nuke":
+				offset = nukeoffset;
+				size = nukesize;
+				break;
+			default:
+				offset = dust2offset;
+				size = dust2size;
+					  }
+		
+		// Get position and calculate percentage
+		var positions = bomb.position.split(',');
+		var x = parseFloat(positions[0]);
+		var y = parseFloat(positions[1]);
+		var z = parseFloat(positions[2]);
+		x = x + offset[0];
+		y = y + offset[1];
+		var xp = (x/size[0])*100;
+		var yp = (1 - (y/size[1]))*100;
+	
+		$('#map').append('<img class="bombpos" style="left:' + xp + '%;top:' + yp + '%" src="/public/csgo_icons/weapon_c4.svg">');
+		//$('#map').append('<span class="grenadeposname" style="left:' + xp + '%;top:calc(' + yp + '% + 15px)">' + grenade_type + '</span>');
+	//}
+}
 
 function addGrenadePosition(grenade, mapname){
 	// Add new position and name to map if alive
@@ -119,17 +194,30 @@ function addGrenadePosition(grenade, mapname){
 			default:
 				offset = dust2offset;
 				size = dust2size;
-					  }
+		}
 		
 		// Get position and calculate percentage
-		var positions = grenade.position.split(',');
-		var x = parseFloat(positions[0]);
-		var y = parseFloat(positions[1]);
-		var z = parseFloat(positions[2]);
-		x = x + offset[0];
-		y = y + offset[1];
-		var xp = (x/size[0])*100;
-		var yp = (1 - (y/size[1]))*100;
+		if(grenade.type != "inferno"){
+			var positions = grenade.position.split(',');
+			var x = parseFloat(positions[0]);
+			var y = parseFloat(positions[1]);
+			var z = parseFloat(positions[2]);
+			x = x + offset[0];
+			y = y + offset[1];
+			var xp = (x/size[0])*100;
+			var yp = (1 - (y/size[1]))*100;
+		}
+		else {
+			var positions = ["0","0","0"];
+			var x = parseFloat(positions[0]);
+			var y = parseFloat(positions[1]);
+			var z = parseFloat(positions[2]);
+			x = x + offset[0];
+			y = y + offset[1];
+			var xp = (x/size[0])*100;
+			var yp = (1 - (y/size[1]))*100;
+		}
+
 		switch(grenade.type){
 			default:
 				console.log("Unknown grenade data");
@@ -147,6 +235,10 @@ function addGrenadePosition(grenade, mapname){
 				var grenade_img = "weapon_flashbang.svg";
 				var grenade_type = "flash";
 				break;
+			case "inferno":
+				//console.log("incendiary || molotov");
+				var grenade_img = "weapon_incgrenade.svg";
+				var grenade_type = "inferno";
 		}
 
 		$('#map').append('<img class="grenadepos" style="left:' + xp + '%;top:' + yp + '%" src="/public/csgo_icons/' + grenade_img + '">');

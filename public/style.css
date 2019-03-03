@@ -252,6 +252,12 @@ body{
 	-webkit-transform: translate(-50%, -50%);
 }
 
+.bombpos{
+	position: absolute;
+	transform: translate(-50%, -50%);
+	-webkit-transform: translate(-50%, -50%);
+}
+
 .playerposname{
 	position: absolute;
 	transform: translate(-50%, -50%);
