@@ -1,5 +1,8 @@
 {
   "name": "GamestateIntegration-Abuse",
+  "scripts": {
+    "start": "node index.js"
+  },
   "version": "1.0.0",
   "description": "Abuses the CSGO gamestate integration by creating a maphack. THIS IS ONLY FOR DEMONSTRATION PORPUSE, DO NOT USE THIS TO GET ANY ADVANTAGE!",
   "dependencies": {

@@ -31,6 +31,6 @@ io.on('connection', function(socket){
 	console.log('Connection established!');
 });
 
-http.listen(3000, function(){
+http.listen(3010, function(){
 	console.log('Listening on localhost:3000');
 });
