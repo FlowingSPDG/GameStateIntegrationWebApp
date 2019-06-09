@@ -10,7 +10,7 @@
 
 ## Example
 
-![Game State Integration Example](https://github.com/Reeley/GameStateIntegrationWebApp/edit/master/example.jpg "Webpage example")
+![Game State Integration Example](https://github.com/utage-tech/GameStateIntegrationWebApp/blob/master/example.jpg "Webpage example")
 
 ## Supported maps
 
